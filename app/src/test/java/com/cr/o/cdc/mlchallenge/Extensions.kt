@@ -19,6 +19,7 @@ fun <T> getValue(liveData: LiveData<RetrofitResponse<T>>): RetrofitResponse<T>? 
             is RetrofitErrorResponse -> throw Exception("Error in request")
         }
     }
-    latch.await(1000, TimeUnit.SECONDS)
+    latch.await(10, TimeUnit.SECONDS)
     return response
 }
+
