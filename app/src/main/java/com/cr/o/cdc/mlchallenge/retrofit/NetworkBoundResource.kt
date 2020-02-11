@@ -43,9 +43,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
             when (response) {
-                is ApiSuccessResponse -> {
+                is RetrofitSuccessResponse -> {
                     appExecutors.diskIO().execute {
-                        saveCallResult(processResponse(RetrofitResource.success(response.body)))
+                        saveCallResult(processResponse(RetrofitResource.success(response.data)))
                         appExecutors.mainThread().execute {
                             result.addSource(loadFromDb()) { newData ->
                                 setValue(RetrofitResource.success(newData))
@@ -53,7 +53,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                         }
                     }
                 }
-                is ApiErrorResponse -> {
+                is RetrofitErrorResponse -> {
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
                         setValue(RetrofitResource.error())

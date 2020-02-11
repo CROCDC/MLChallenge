@@ -5,6 +5,7 @@ import com.cr.o.cdc.mlchallenge.MLChallengeApp
 import com.cr.o.cdc.mlchallenge.R
 import com.cr.o.cdc.mlchallenge.db.MLChallengeDB
 import com.cr.o.cdc.mlchallenge.retrofit.AppExecutors
+import com.cr.o.cdc.mlchallenge.retrofit.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -26,6 +27,7 @@ class AppModule {
     fun provideRetrofit(app: MLChallengeApp): Retrofit = Retrofit.Builder()
         .baseUrl(app.resources.getString(R.string.api_ml_url))
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(LiveDataCallAdapterFactory())
         .build()
 
     @Singleton
