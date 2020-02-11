@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MLChallenge</string>
+    <string name="shipping_free">Envío gratis</string>
+    <string name="installments">Hasta %1d cuotas sin interés</string>
+    <string name="cant_sold">%1d vendidos</string>
+    <string name="brand">por %1$s</string>
+    <string name="attributes">Atributos</string>
+    <string name="attribute_separator">%1$s: %2$s</string>
+</resources>
