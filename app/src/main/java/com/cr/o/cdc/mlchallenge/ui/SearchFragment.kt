@@ -70,6 +70,7 @@ class SearchFragment : Fragment(), Injectable {
         }
 
         viewModel.products.observe(viewLifecycleOwner, Observer {
+            binding.btnRefresh.isEnabled = true
             adapter.submitList(it)
         })
     }
