@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.cr.o.cdc.mlchallenge.databinding.FragmentSearchBinding
 import com.cr.o.cdc.mlchallenge.di.Injectable
 import com.cr.o.cdc.mlchallenge.retrofit.StatusResponse
+import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 import com.cr.o.cdc.mlchallenge.vm.SearchViewModel
 import javax.inject.Inject
 
@@ -62,9 +63,9 @@ class SearchFragment : Fragment(), Injectable {
         }
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.swipe.isRefreshing = it == StatusResponse.LOADING
+            binding.progressbar.visibleOrGone(it == StatusResponse.LOADING)
         })
-        binding.swipe.setOnRefreshListener {
+        binding.btnRefresh.setOnClickListener {
             viewModel.refresh()
         }
 

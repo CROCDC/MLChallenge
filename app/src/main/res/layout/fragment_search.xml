@@ -3,61 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="3dp"
+                app:endIconDrawable="@drawable/ic_search_24dp"
+                app:endIconMode="custom"
+                app:endIconTint="@color/green_1FE700"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="scroll|enterAlways">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInput"
-                    android:padding="3dp"
+                <EditText
+                    android:id="@+id/input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:endIconDrawable="@drawable/ic_search_24dp"
-                    app:endIconMode="custom"
-                    app:endIconTint="@color/green_1FE700"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    android:hint="@string/search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textNoSuggestions"
+                    tools:text="Motorola" />
 
-                    <EditText
-                        android:id="@+id/input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/search_hint"
-                        android:imeOptions="actionSearch"
-                        android:inputType="textNoSuggestions"
-                        tools:text="Motorola" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInput"
+            tools:listitem="@layout/list_item_product" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInput"
-                tools:listitem="@layout/list_item_product" />
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/bkg_white_rounded_46"
+            android:text="@string/refresh"
+            android:textColor="@color/black" />
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="90dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

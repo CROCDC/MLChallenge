@@ -7,4 +7,5 @@
     <string name="attributes">Atributos</string>
     <string name="attribute_separator">%1$s: %2$s</string>
     <string name="search_hint">Buscar productos</string>
+    <string name="refresh">Refresh</string>
 </resources>

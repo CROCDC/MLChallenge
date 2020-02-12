@@ -22,7 +22,6 @@ class SearchViewModel @Inject constructor(private val repository: MLRepository) 
         it.status
     }
 
-
     fun setSearch(search: String?) {
         this.search.value = search
     }

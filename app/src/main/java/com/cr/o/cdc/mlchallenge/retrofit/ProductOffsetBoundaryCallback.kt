@@ -39,7 +39,9 @@ class ProductOffsetBoundaryCallback(
         networkStatus.value = StatusResponse.LOADING
 
         networkIO.execute {
-            val response = mlApi.search(search, offset).execute().body()
+            val response = mlApi.search(search, offset).execute().also {
+                Log.e("CROCDC",it.raw().request().url().toString())
+            }.body()
 
             if (response != null) {
                 dao.saveAll(response.products)
