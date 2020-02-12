@@ -5,9 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cr.o.cdc.mlchallenge.db.model.InfoSearchProduct
 import com.cr.o.cdc.mlchallenge.db.model.Product
-import com.cr.o.cdc.mlchallenge.db.model.SearchResponse
 
-@Database(entities = [SearchResponse::class, Product::class, InfoSearchProduct::class], version = 1)
+@Database(entities = [Product::class, InfoSearchProduct::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class MLChallengeDB : RoomDatabase() {
 
