@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.cr.o.cdc.mlchallenge.databinding.FragmentSearchBinding
 import com.cr.o.cdc.mlchallenge.di.Injectable
+import com.cr.o.cdc.mlchallenge.retrofit.StatusResponse
 import com.cr.o.cdc.mlchallenge.vm.SearchViewModel
 import javax.inject.Inject
 
@@ -61,14 +62,14 @@ class SearchFragment : Fragment(), Injectable {
         }
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.swipe.isRefreshing = it
+            binding.swipe.isRefreshing = it == StatusResponse.LOADING
         })
         binding.swipe.setOnRefreshListener {
             viewModel.refresh()
         }
 
         viewModel.products.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it.data)
+            adapter.submitList(it)
         })
     }
 }

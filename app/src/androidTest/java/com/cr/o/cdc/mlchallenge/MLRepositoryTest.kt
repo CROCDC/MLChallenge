@@ -29,6 +29,11 @@ class MLRepositoryTest {
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+   private val db = Room.databaseBuilder(app, MLChallengeDB::class.java, MLChallengeDB.DATABASE_NAME)
+        .fallbackToDestructiveMigration()
+        .allowMainThreadQueries()
+        .build()
+
     private val product: Product = Product::class.makeRandomInstance(
         listOf(
             Parameter(
@@ -42,10 +47,7 @@ class MLRepositoryTest {
     private val mutableLiveData = MutableLiveData<RetrofitSuccessResponse<SearchResponse>>()
 
     private val mlRepository = MLRepository(
-        Room.databaseBuilder(app, MLChallengeDB::class.java, MLChallengeDB.DATABASE_NAME)
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build(),
+        db,
         mockk<Retrofit>(relaxed = true).apply {
             every { create(MLApi::class.java) } returns mockk<MLApi>(relaxed = true).apply {
                 every { item("1") } returns MutableLiveData(
@@ -55,45 +57,10 @@ class MLRepositoryTest {
                         )
                     )
                 )
-                every { search("motorola") } returns MutableLiveData(
-                    RetrofitSuccessResponse(
-                        SearchResponse::class.makeRandomInstance(
-                            listOf(
-                                Parameter(
-                                    "search",
-                                    SearchResponse::class,
-                                    "motorola"
-                                ),
-                                Parameter(
-                                    "products",
-                                    SearchResponse::class,
-                                    listOf<Product>(
-                                        product,
-                                        Product::class.makeRandomInstance(
-                                            listOf(
-                                                Parameter(
-                                                    "id",
-                                                    Product::class,
-                                                    "2"
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
             }
         },
         AppModule().provideAppExecutors()
     )
-
-    @Test
-    fun search() {
-        val resource = getValue(mlRepository.search("motorola"))
-        assertTrue(resource?.data?.get(0)?.id == "1")
-    }
 
     @Test
     fun item() {
@@ -103,7 +70,7 @@ class MLRepositoryTest {
 
     @Test
     fun loadItemFromSearchSave() {
-        getValue(mlRepository.search("motorola"))
+        //db.productsDao().saveOffSet()
         val resource = getValue(mlRepository.item("1"))
         assertTrue(resource?.data?.id == "1")
         assertTrue(resource?.data?.title != "title for network")

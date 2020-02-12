@@ -4,16 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cr.o.cdc.mlchallenge.R
 import com.cr.o.cdc.mlchallenge.databinding.ListItemProductBinding
 import com.cr.o.cdc.mlchallenge.db.model.Product
+import com.cr.o.cdc.mlchallenge.db.model.ProductOffset
 import com.cr.o.cdc.mlchallenge.utils.loadFromUrl
 import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 
-class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductCallback) {
+class ProductAdapter : PagedListAdapter<ProductOffset, ProductAdapter.ProductViewHolder>(ProductCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder =
         ProductViewHolder(
             ListItemProductBinding.inflate(
@@ -22,13 +23,16 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Pr
         )
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = getItem(position)
-        holder.itemView.setOnClickListener {
-            it.findNavController().navigate(
-                SearchFragmentDirections.actionSearchFragmentToProductDetailFragment(product.id)
-            )
+        getItem(position)?.let { productOffset ->
+            holder.itemView.setOnClickListener {
+                it.findNavController().navigate(
+                    SearchFragmentDirections.actionSearchFragmentToProductDetailFragment(
+                        productOffset.product.id
+                    )
+                )
+            }
+            holder.bind(productOffset.product)
         }
-        holder.bind(product)
     }
 
 
@@ -50,12 +54,12 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Pr
         }
     }
 
-    object ProductCallback : DiffUtil.ItemCallback<Product>() {
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean =
+    object ProductCallback : DiffUtil.ItemCallback<ProductOffset>() {
+        override fun areItemsTheSame(oldItem: ProductOffset, newItem: ProductOffset): Boolean =
             oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean =
-            oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: ProductOffset, newItem: ProductOffset): Boolean =
+            oldItem.product.id == newItem.product.id
 
     }
 }

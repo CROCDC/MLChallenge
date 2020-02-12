@@ -11,7 +11,11 @@ import retrofit2.http.Query
 interface MLApi {
 
     @GET("/sites/MLA/search")
-    fun search(@Query(value = "q") search: String): LiveData<RetrofitResponse<SearchResponse>>
+    fun search(
+        @Query(value = "q") search: String, @Query(value = "offset") offset: Int, @Query(
+            value = "limit"
+        ) limit: Int = 10
+    ): Call<SearchResponse>
 
     @GET("/items/{id}")
     fun item(@Path("id") id: String): LiveData<RetrofitResponse<Product>>
