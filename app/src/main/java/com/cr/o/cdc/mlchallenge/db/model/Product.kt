@@ -10,7 +10,6 @@ data class Product(
     @PrimaryKey
     val id: String,
     @Embedded val shipping: Shipping,
-    @Embedded val installments: Installments?,
     val thumbnail: String,
     val title: String,
     val price: Double,

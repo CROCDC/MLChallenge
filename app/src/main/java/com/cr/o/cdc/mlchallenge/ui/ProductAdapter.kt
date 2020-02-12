@@ -45,13 +45,6 @@ class ProductAdapter :
             binding.txtTitle.text = product.title
             binding.txtPrice.text = product.price.toString()
             binding.txtShippingFree.visibleOrGone(product.shipping.free)
-
-            product.installments?.quantity?.let {
-                binding.txtInstallments.visibility = View.VISIBLE
-                binding.txtInstallments.text = itemView.context.getString(R.string.installments, it)
-            } ?: kotlin.run {
-                binding.txtInstallments.visibility = View.GONE
-            }
         }
     }
 
@@ -63,8 +56,6 @@ class ProductAdapter :
             oldItem.product.thumbnail == newItem.product.thumbnail && oldItem.product.thumbnail == newItem.product.thumbnail &&
                     oldItem.product.title == newItem.product.title &&
                     oldItem.product.price == newItem.product.price &&
-                    oldItem.product.shipping == newItem.product.shipping &&
-                    oldItem.product.installments == newItem.product.installments
-
+                    oldItem.product.shipping == newItem.product.shipping
     }
 }
