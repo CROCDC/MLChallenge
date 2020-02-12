@@ -70,7 +70,7 @@ class MLRepositoryTest {
 
     @Test
     fun loadItemFromSearchSave() {
-        //db.productsDao().saveOffSet()
+        db.productsDao().save(product)
         val resource = getValue(mlRepository.item("1"))
         assertTrue(resource?.data?.id == "1")
         assertTrue(resource?.data?.title != "title for network")
