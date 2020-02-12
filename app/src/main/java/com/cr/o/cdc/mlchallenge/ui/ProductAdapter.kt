@@ -1,13 +1,11 @@
 package com.cr.o.cdc.mlchallenge.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.cr.o.cdc.mlchallenge.R
 import com.cr.o.cdc.mlchallenge.databinding.ListItemProductBinding
 import com.cr.o.cdc.mlchallenge.db.model.Product
 import com.cr.o.cdc.mlchallenge.db.model.ProductOffset

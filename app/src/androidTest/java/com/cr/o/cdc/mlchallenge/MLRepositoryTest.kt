@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.cr.o.cdc.mlchallenge.db.MLChallengeDB
 import com.cr.o.cdc.mlchallenge.db.model.Product
-import com.cr.o.cdc.mlchallenge.db.model.SearchResponse
 import com.cr.o.cdc.mlchallenge.di.AppModule
 import com.cr.o.cdc.mlchallenge.retrofit.MLApi
 import com.cr.o.cdc.mlchallenge.retrofit.MLRepository
@@ -29,10 +28,11 @@ class MLRepositoryTest {
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-   private val db = Room.databaseBuilder(app, MLChallengeDB::class.java, MLChallengeDB.DATABASE_NAME)
-        .fallbackToDestructiveMigration()
-        .allowMainThreadQueries()
-        .build()
+    private val db =
+        Room.databaseBuilder(app, MLChallengeDB::class.java, MLChallengeDB.DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
 
     private val product: Product = Product::class.makeRandomInstance(
         listOf(
@@ -43,8 +43,6 @@ class MLRepositoryTest {
             )
         )
     )
-
-    private val mutableLiveData = MutableLiveData<RetrofitSuccessResponse<SearchResponse>>()
 
     private val mlRepository = MLRepository(
         db,
