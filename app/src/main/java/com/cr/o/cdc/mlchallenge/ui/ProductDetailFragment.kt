@@ -15,6 +15,7 @@ import com.cr.o.cdc.mlchallenge.databinding.FragmentProductDetailBinding
 import com.cr.o.cdc.mlchallenge.db.model.Attribute
 import com.cr.o.cdc.mlchallenge.di.Injectable
 import com.cr.o.cdc.mlchallenge.utils.loadFromUrl
+import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 import com.cr.o.cdc.mlchallenge.vm.ProductDetailViewModel
 import javax.inject.Inject
 
@@ -41,11 +42,9 @@ class ProductDetailFragment : Fragment(), Injectable {
         val viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(ProductDetailViewModel::class.java)
 
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.swipe.isRefreshing = it
-        })
+        viewModel.loading.observe(viewLifecycleOwner, Observer(binding.progressbar::visibleOrGone))
 
-        binding.swipe.setOnRefreshListener {
+        binding.btnRefresh.setOnClickListener {
             viewModel.refresh()
         }
 
@@ -55,6 +54,7 @@ class ProductDetailFragment : Fragment(), Injectable {
         viewModel.setProductId(args.productId)
 
         viewModel.product.observe(viewLifecycleOwner, Observer { r ->
+            binding.btnRefresh.isEnabled = r.data != null
             r.data?.let { product ->
                 binding.img.loadFromUrl(product.thumbnail)
                 binding.txtSoldQuantity.text = getString(R.string.cant_sold, product.soldQuantity)

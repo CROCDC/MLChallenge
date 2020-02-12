@@ -14,7 +14,8 @@ import com.cr.o.cdc.mlchallenge.db.model.ProductOffset
 import com.cr.o.cdc.mlchallenge.utils.loadFromUrl
 import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 
-class ProductAdapter : PagedListAdapter<ProductOffset, ProductAdapter.ProductViewHolder>(ProductCallback) {
+class ProductAdapter :
+    PagedListAdapter<ProductOffset, ProductAdapter.ProductViewHolder>(ProductCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder =
         ProductViewHolder(
             ListItemProductBinding.inflate(
@@ -56,10 +57,14 @@ class ProductAdapter : PagedListAdapter<ProductOffset, ProductAdapter.ProductVie
 
     object ProductCallback : DiffUtil.ItemCallback<ProductOffset>() {
         override fun areItemsTheSame(oldItem: ProductOffset, newItem: ProductOffset): Boolean =
-            oldItem == newItem
+            oldItem.product.id == newItem.product.id
 
         override fun areContentsTheSame(oldItem: ProductOffset, newItem: ProductOffset): Boolean =
-            oldItem.product.id == newItem.product.id
+            oldItem.product.thumbnail == newItem.product.thumbnail && oldItem.product.thumbnail == newItem.product.thumbnail &&
+                    oldItem.product.title == newItem.product.title &&
+                    oldItem.product.price == newItem.product.price &&
+                    oldItem.product.shipping == newItem.product.shipping &&
+                    oldItem.product.installments == newItem.product.installments
 
     }
 }
