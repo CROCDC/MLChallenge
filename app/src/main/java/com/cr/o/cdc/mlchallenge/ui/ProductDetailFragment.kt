@@ -15,7 +15,6 @@ import com.cr.o.cdc.mlchallenge.databinding.FragmentProductDetailBinding
 import com.cr.o.cdc.mlchallenge.db.model.Attribute
 import com.cr.o.cdc.mlchallenge.di.Injectable
 import com.cr.o.cdc.mlchallenge.utils.loadFromUrl
-import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 import com.cr.o.cdc.mlchallenge.vm.ProductDetailViewModel
 import javax.inject.Inject
 
@@ -45,7 +44,7 @@ class ProductDetailFragment : Fragment(), Injectable {
 
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.progressbar.visibleOrGone(it)
+            binding.swipe.isRefreshing = it
         })
 
 
@@ -67,7 +66,11 @@ class ProductDetailFragment : Fragment(), Injectable {
                 binding.txtPrice.text = product.price.toString()
 
                 binding.txtAttributes.visibility = View.VISIBLE
-                attributesAdapter.submitList(product.attributes.minus(brand))
+
+                attributesAdapter.submitList(product.getAttributesFiltered().minus(brand))
+                binding.recyclerAttributes.post {
+                    binding.recyclerAttributes.scrollToPosition(0)
+                }
             }
         })
 

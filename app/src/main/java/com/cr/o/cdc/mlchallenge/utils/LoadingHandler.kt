@@ -6,20 +6,21 @@ import androidx.lifecycle.Observer
 import com.cr.o.cdc.mlchallenge.retrofit.RetrofitResource
 import com.cr.o.cdc.mlchallenge.retrofit.StatusResponse
 
-class LoadingHandler<T> : Observer<RetrofitResource<T>> {
+class LoadingHandler : Observer<RetrofitResource<*>> {
 
-    private var source: LiveData<RetrofitResource<T>>? = null
+    private var source: LiveData<RetrofitResource<*>>? = null
     private val status = MutableLiveData<Boolean>()
 
-    fun setSource(source: LiveData<RetrofitResource<T>>) {
-        this.source = source
+    fun <T : Any> setSource(source: LiveData<RetrofitResource<T>>) {
+        @Suppress("UNCHECKED_CAST")
+        this.source = source as LiveData<RetrofitResource<*>>
         source.observeForever(this)
     }
 
     fun getStatus(): LiveData<Boolean> = status
 
 
-    override fun onChanged(t: RetrofitResource<T>?) {
+    override fun onChanged(t: RetrofitResource<*>?) {
         if (t != null) {
             status.value = t.status == StatusResponse.LOADING
 

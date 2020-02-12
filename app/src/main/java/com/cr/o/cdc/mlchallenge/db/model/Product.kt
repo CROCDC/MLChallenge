@@ -17,4 +17,8 @@ data class Product(
     @SerializedName("sold_quantity")
     val soldQuantity: Int,
     val attributes: List<Attribute>
-)
+) {
+    fun getAttributesFiltered(): List<Attribute> = attributes.filter {
+        it.valueName != null
+    }
+}

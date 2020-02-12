@@ -14,7 +14,7 @@ class SearchViewModel @Inject constructor(private val repository: MLRepository) 
 
     private val search = MutableLiveData<String>()
 
-    private val handler = LoadingHandler<List<Product>>()
+    private val handler = LoadingHandler()
 
     val loading
         get() = handler.getStatus()

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ProductDetailViewModel @Inject constructor(private val repository: MLRepository) :
     ViewModel() {
 
-    private val handler = LoadingHandler<Product>()
+    private val handler = LoadingHandler()
 
     val loading
         get() = handler.getStatus()
