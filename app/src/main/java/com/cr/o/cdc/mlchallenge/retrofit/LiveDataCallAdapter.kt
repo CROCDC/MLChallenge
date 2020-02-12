@@ -16,7 +16,7 @@ class LiveDataCallAdapter<R>(private val responseType: Type) :
 
     override fun adapt(call: Call<R>): LiveData<RetrofitResponse<R>> {
         return object : LiveData<RetrofitResponse<R>>() {
-            private var started = AtomicBoolean(false)
+            private var started = AtomicBoolean()
             override fun onActive() {
                 super.onActive()
                 if (started.compareAndSet(false, true)) {

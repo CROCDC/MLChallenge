@@ -13,15 +13,33 @@ fun <T> getValue(liveData: LiveData<RetrofitResource<T>>): RetrofitResource<T>? 
     var response = RetrofitResource.loading<T>()
     val latch = CountDownLatch(1)
     liveData.observeForever {
-        when (it.status) {
-            StatusResponse.SUCCESS -> {
-                response = it
-                latch.countDown()
+        when {
+            it.status == StatusResponse.LOADING && it.data != null -> {
+                if (it.data is List<*>) {
+                    if ((it.data as? List<*>)?.isNotEmpty() == true) {
+                        response = it
+                        latch.countDown()
+                    }
+                } else {
+                    response = it
+                    latch.countDown()
+                }
             }
-            StatusResponse.ERROR -> throw Exception("Error")
+            it.status == StatusResponse.SUCCESS && it.data != null -> {
+                if (it.data is List<*>) {
+                    if ((it.data as? List<*>)?.isNotEmpty() == true) {
+                        response = it
+                        latch.countDown()
+                    }
+                } else {
+                    response = it
+                    latch.countDown()
+                }
+            }
+            it.status == StatusResponse.ERROR -> throw Exception("Error")
         }
     }
-    latch.await(10, TimeUnit.SECONDS)
+    latch.await(20, TimeUnit.SECONDS)
     return response
 }
 

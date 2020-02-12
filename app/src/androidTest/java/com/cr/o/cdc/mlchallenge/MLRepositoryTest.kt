@@ -21,38 +21,62 @@ import retrofit2.Retrofit
 class MLRepositoryTest {
 
     private val app =
-        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as MLChallengeApp
+        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as MLChallengeApp).also {
+            it.deleteDatabase(MLChallengeDB.DATABASE_NAME)
+        }
 
     @Rule
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private val product: Product = Product::class.makeRandomInstance(
+        listOf(
+            Parameter(
+                "id",
+                Product::class,
+                "1"
+            )
+        )
+    )
+
+    private val mutableLiveData = MutableLiveData<RetrofitSuccessResponse<SearchResponse>>()
 
     private val mlRepository = MLRepository(
         Room.databaseBuilder(app, MLChallengeDB::class.java, MLChallengeDB.DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build(),
-        mockk<Retrofit>().apply {
-            every { create(MLApi::class.java) } returns mockk<MLApi>().apply {
+        mockk<Retrofit>(relaxed = true).apply {
+            every { create(MLApi::class.java) } returns mockk<MLApi>(relaxed = true).apply {
+                every { item("1") } returns MutableLiveData(
+                    RetrofitSuccessResponse(
+                        product.copy(
+                            title = "title for network"
+                        )
+                    )
+                )
                 every { search("motorola") } returns MutableLiveData(
                     RetrofitSuccessResponse(
-                        SearchResponse(
+                        SearchResponse::class.makeRandomInstance(
                             listOf(
-                                Product::class.makeRandomInstance(
-                                    listOf(
-                                        Parameter(
-                                            "id",
-                                            Product::class,
-                                            "1"
-                                        )
-                                    )
+                                Parameter(
+                                    "search",
+                                    SearchResponse::class,
+                                    "motorola"
                                 ),
-                                Product::class.makeRandomInstance(
-                                    listOf(
-                                        Parameter(
-                                            "id",
-                                            Product::class,
-                                            "2"
+                                Parameter(
+                                    "products",
+                                    SearchResponse::class,
+                                    listOf<Product>(
+                                        product,
+                                        Product::class.makeRandomInstance(
+                                            listOf(
+                                                Parameter(
+                                                    "id",
+                                                    Product::class,
+                                                    "2"
+                                                )
+                                            )
                                         )
                                     )
                                 )
@@ -69,6 +93,19 @@ class MLRepositoryTest {
     fun search() {
         val resource = getValue(mlRepository.search("motorola"))
         assertTrue(resource?.data?.get(0)?.id == "1")
+    }
 
+    @Test
+    fun item() {
+        val resource = getValue(mlRepository.item("1"))
+        assertTrue(resource?.data?.id == "1")
+    }
+
+    @Test
+    fun loadItemFromSearchSave() {
+        getValue(mlRepository.search("motorola"))
+        val resource = getValue(mlRepository.item("1"))
+        assertTrue(resource?.data?.id == "1")
+        assertTrue(resource?.data?.title != "title for network")
     }
 }

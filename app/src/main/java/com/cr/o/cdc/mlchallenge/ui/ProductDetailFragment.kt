@@ -7,21 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import com.cr.o.cdc.mlchallenge.R
 import com.cr.o.cdc.mlchallenge.databinding.FragmentProductDetailBinding
 import com.cr.o.cdc.mlchallenge.db.model.Attribute
+import com.cr.o.cdc.mlchallenge.di.Injectable
 import com.cr.o.cdc.mlchallenge.utils.loadFromUrl
 import com.cr.o.cdc.mlchallenge.utils.visibleOrGone
 import com.cr.o.cdc.mlchallenge.vm.ProductDetailViewModel
+import javax.inject.Inject
 
-class ProductDetailFragment : Fragment() {
+class ProductDetailFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentProductDetailBinding
 
     val args: ProductDetailFragmentArgs by navArgs()
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +40,8 @@ class ProductDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel::class.java)
+        val viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(ProductDetailViewModel::class.java)
 
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {

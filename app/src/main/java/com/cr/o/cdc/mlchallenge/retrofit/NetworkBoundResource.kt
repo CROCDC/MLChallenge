@@ -18,7 +18,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
             if (shouldFetch(data)) {
-                fetchFromNetwork(dbSource)
+                fetchFromNetwork(dbSource, data)
             } else {
                 result.addSource(dbSource) { newData ->
                     setValue(RetrofitResource.success(newData))
@@ -34,8 +34,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         }
     }
 
-    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork(dbSource: LiveData<ResultType>, dbData: ResultType) {
         val apiResponse = createCall()
+        setValue(RetrofitResource.loading(dbData))
         result.addSource(dbSource) { newData ->
             setValue(RetrofitResource.loading(newData))
         }
