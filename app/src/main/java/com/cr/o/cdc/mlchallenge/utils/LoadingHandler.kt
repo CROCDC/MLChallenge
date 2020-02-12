@@ -11,14 +11,20 @@ class LoadingHandler : Observer<RetrofitResource<*>> {
     private var source: LiveData<RetrofitResource<*>>? = null
     private val status = MutableLiveData<Boolean>()
 
-    fun <T : Any> setSource(source: LiveData<RetrofitResource<T>>) {
-        @Suppress("UNCHECKED_CAST")
-        this.source = source as LiveData<RetrofitResource<*>>
-        source.observeForever(this)
+    fun <T> setSource(source: LiveData<RetrofitResource<T>>?) {
+        if (source != null) {
+            @Suppress("UNCHECKED_CAST")
+            this.source = source as LiveData<RetrofitResource<*>>
+            source.observeForever(this)
+        } else {
+            this.source = null
+            source?.removeObserver(this)
+            status.value = false
+        }
+
     }
 
     fun getStatus(): LiveData<Boolean> = status
-
 
     override fun onChanged(t: RetrofitResource<*>?) {
         if (t != null) {

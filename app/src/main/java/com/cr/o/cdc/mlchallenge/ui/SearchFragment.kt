@@ -63,6 +63,9 @@ class SearchFragment : Fragment(), Injectable {
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             binding.swipe.isRefreshing = it
         })
+        binding.swipe.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         viewModel.products.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it.data)

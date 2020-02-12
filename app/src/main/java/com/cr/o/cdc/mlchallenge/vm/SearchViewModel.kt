@@ -29,4 +29,13 @@ class SearchViewModel @Inject constructor(private val repository: MLRepository) 
     fun setSearch(search: String?) {
         this.search.value = search
     }
+
+    fun refresh() {
+        val search = search.value
+        if (search != null) {
+            handler.setSource(repository.search(search))
+        } else {
+            handler.setSource<Any>(null)
+        }
+    }
 }

@@ -22,7 +22,7 @@ class ProductDetailFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentProductDetailBinding
 
-    val args: ProductDetailFragmentArgs by navArgs()
+    private val args: ProductDetailFragmentArgs by navArgs()
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -36,22 +36,25 @@ class ProductDetailFragment : Fragment(), Injectable {
         return binding.root
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(ProductDetailViewModel::class.java)
 
-
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             binding.swipe.isRefreshing = it
         })
 
+        binding.swipe.setOnRefreshListener {
+            viewModel.refresh()
+        }
 
         val attributesAdapter = AttributesAdapter()
         binding.recyclerAttributes.adapter = attributesAdapter
 
-        viewModel.item(args.productId).observe(viewLifecycleOwner, Observer { r ->
+        viewModel.setProductId(args.productId)
+
+        viewModel.product.observe(viewLifecycleOwner, Observer { r ->
             r.data?.let { product ->
                 binding.img.loadFromUrl(product.thumbnail)
                 binding.txtSoldQuantity.text = getString(R.string.cant_sold, product.soldQuantity)
