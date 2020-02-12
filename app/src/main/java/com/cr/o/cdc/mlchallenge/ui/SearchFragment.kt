@@ -3,7 +3,6 @@ package com.cr.o.cdc.mlchallenge.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,7 @@ class SearchFragment : Fragment(), Injectable {
                 ?.hideSoftInputFromWindow(binding.root.windowToken, 0)
         }
 
-        binding.input.setOnEditorActionListener { _: View, actionId: Int, _: KeyEvent? ->
+        binding.input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.setSearch(binding.input.text.toString())
                 (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)

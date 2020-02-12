@@ -1,11 +1,10 @@
 package com.cr.o.cdc.mlchallenge.retrofit
 
-import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.cr.o.cdc.mlchallenge.db.ProductsDao
-import com.cr.o.cdc.mlchallenge.db.model.OffsetProduct
+import com.cr.o.cdc.mlchallenge.db.model.InfoSearchProduct
 import com.cr.o.cdc.mlchallenge.db.model.ProductOffset
 import retrofit2.Retrofit
 import java.util.concurrent.Executor
@@ -43,7 +42,7 @@ class ProductOffsetBoundaryCallback(
 
             if (response != null) {
                 dao.saveAll(response.products)
-                dao.saveOffSet(response.products.map { OffsetProduct(it.id, offset, search) })
+                dao.saveOffSet(response.products.map { InfoSearchProduct(it.id, offset, search) })
 
                 networkStatus.postValue(StatusResponse.SUCCESS)
             } else {

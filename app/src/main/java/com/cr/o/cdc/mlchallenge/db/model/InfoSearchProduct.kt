@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 
-@Entity(tableName = "offset_product", primaryKeys = ["product_id", "search"])
-data class OffsetProduct(
+@Entity(tableName = "info_search_product", primaryKeys = ["product_id", "search"])
+data class InfoSearchProduct(
     @ColumnInfo(name = "product_id") val id: String,
     val offset: Int,
     @ColumnInfo(name = "search") val search: String
